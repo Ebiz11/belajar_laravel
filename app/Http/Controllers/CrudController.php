@@ -16,7 +16,7 @@ class CrudController extends Controller
     public function index()
     {
 
-        $datas = Crud::orderBy('id', 'Desc')->paginate(5);
+        $datas = Crud::orderBy('id', 'Desc')->paginate(4);
         return view('show')->with('datas', $datas);
     }
 
@@ -61,7 +61,8 @@ class CrudController extends Controller
      */
     public function show($id)
     {
-        //
+      $tampilkan = Crud::find($id);
+      return view('tampil')->with('tampilkan', $tampilkan);
     }
 
     /**
@@ -72,7 +73,8 @@ class CrudController extends Controller
      */
     public function edit($id)
     {
-        //
+      $tampiledit = Crud::where('id', $id)->first();
+      return view('edit')->with('tampiledit', $tampiledit);
     }
 
     /**
@@ -84,7 +86,13 @@ class CrudController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+       $update = Crud::where('id', $id)->first();
+       $update->nama_buah = $request['nama_buah'];
+       $update->harga = $request['harga'];
+       $update->jumlah = $request['jumlah'];
+       $update->update();
+
+       return redirect()->to('/');
     }
 
     /**
@@ -95,6 +103,9 @@ class CrudController extends Controller
      */
     public function destroy($id)
     {
-        //
+       $hapus = Crud::find($id);
+       $hapus->delete();
+
+       return redirect()->to('/');
     }
 }
